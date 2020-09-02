@@ -49,8 +49,8 @@ dVigenere ns xs = zipWith f cs xs
 kasiski :: [Char] -> [Double]
 kasiski s = helper s 1 []
     where l = fromIntegral (length s) :: Double
-          ci s = 1/(l*l) * (li s) * (li s)
-          li s = fromIntegral $ sum (map (\a -> count a s) ['a'..'z'])
+          ci str = 1/(l*l) * (li str)
+          li str  = fromIntegral $ sum (map (\a -> (count a str) * (count a str)) ['a'..'z'])
           eq tol a b = tol > abs (a-b)
           count x = length . filter (==x)
           period [] t = []

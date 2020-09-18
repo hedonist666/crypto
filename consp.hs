@@ -1,24 +1,26 @@
-import Data.Char -- импортируем символы
-main = do -- мейн через равно пишем как и все функции в хаскеле
-    let s = cesar "test" 9 -- выхлоп цезаря
-    putStrLn s -- выводим
-    putStrLn (dCesar s 9) -- выведем декод 
-    
+import Data.Char 
+import Table
+main = do 
+    putStrLn "CESAR:"
+    let s = cesar "test" 9 
+    putStrLn s 
+    putStrLn (dCesar s 9) 
 
---encode
-cesar :: [Char] -> Int -> [Char] -- тип как в алгебре (принимаем массив чаров, затем число и возвращает массив чаров)
-cesar [] _ = [] -- для пустого массива пустой массив
-cesar (x:xs) n = f x : cesar xs n -- отковыриваем элемент, потом пишем f(x) : (это оператор склеивания с массивом) (цезарь от оставшегося массива)
-    where f = chr . mOd . (+n) . ord -- композиция функций, поэтому точка:
-    -- ord - символ в число
-    -- (+n) - добавляем n
-    -- mOd - функция чтобы по модулю взять учитывая что у нас ASCII таблица символов
-    -- chr - число в символ
+
+cesar :: [Char] -> Int -> [Char] 
+cesar [] _ = [] 
+cesar (x:xs) n = f x : cesar xs n 
+    where f = chr . mOd . (+n) . ord 
           mOd c = ((c - ord 'a') `mod` 26) + ord 'a'
 
---decode (тут все аналогично)
-dCesar :: [Char] -> Int -> [Char] -- тип как в алгебре
-dCesar [] _ = [] -- для пустого массива пустой массив
-dCesar (x:xs) n = f x : dCesar xs n -- отковыриваем элемент и делаем с ним вещи
+dCesar :: [Char] -> Int -> [Char] 
+dCesar [] _ = [] 
+dCesar (x:xs) n = f x : dCesar xs n 
     where f = chr . mOd . (subtract n) . ord
+          mOd c = ((c - ord 'a') `mod` 26) + ord 'a'
+
+vigenere :: [Char] -> [Char] -> [Char]
+vigenere xs ns = zipWith f cs xs
+    where f n = chr . mOd . (+n) . ord 
+          cs  = cycle (map ((subtract (ord 'a') ) . ord) ns)
           mOd c = ((c - ord 'a') `mod` 26) + ord 'a'
